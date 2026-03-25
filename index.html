@@ -561,9 +561,9 @@
   /* RESPONSIVE */
   @media (max-width: 640px) {
     .stats-bar { grid-template-columns: repeat(2, 1fr); }
-    thead th:nth-child(4), thead th:nth-child(5) { display: none; }
-    td:nth-child(4), td:nth-child(5) { display: none; }
     .mercado-pills { gap: 8px; }
+    td, thead th { padding: 9px 8px; font-size: 12px; }
+    .best-badge { font-size: 9px; padding: 2px 6px; }
   }
 </style>
 </head>
@@ -617,10 +617,7 @@
       <div class="stat-num" id="statMercados">3</div>
       <div class="stat-label">Mercados</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-num" id="statEconomia">—</div>
-      <div class="stat-label">Maior economia</div>
-    </div>
+
   </div>
 
   <!-- CATEGORY TABS -->
@@ -799,15 +796,7 @@ function updateStats() {
   document.getElementById('statProdutos').textContent = visible.length;
   document.getElementById('statCategorias').textContent = [...new Set(visible.map(r => r.cat))].length;
 
-  let maxEco = 0;
-  visible.forEach(row => {
-    const vals = [row.farid, row.bh, row.epa].filter(v => v !== null);
-    if (vals.length > 1) {
-      const eco = Math.max(...vals) - Math.min(...vals);
-      if (eco > maxEco) maxEco = eco;
-    }
-  });
-  document.getElementById('statEconomia').textContent = maxEco > 0 ? 'R$ ' + maxEco.toFixed(2).replace('.', ',') : '—';
+
 }
 
 // ============================================================
