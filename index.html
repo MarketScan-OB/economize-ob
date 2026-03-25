@@ -959,21 +959,20 @@ async function sendMsg() {
   const typingId = addTyping();
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://economize-ob-api.marketscan-ob.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: chatHistory
+        message: msg,
+        history: chatHistory.slice(0, -1),
+        systemPrompt: SYSTEM_PROMPT
       })
     });
 
     const data = await res.json();
     removeTyping(typingId);
 
-    const reply = data.content?.map(b => b.text || '').join('') || 'Não consegui processar. Tente novamente.';
+    const reply = data.reply || 'Não consegui processar. Tente novamente.';
     addMsg('ai', reply);
     chatHistory.push({ role: 'assistant', content: reply });
   } catch (e) {
