@@ -984,13 +984,25 @@ async function sendMsg() {
   document.getElementById('chatSend').disabled = false;
 }
 
+function renderMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\* /g, '• ')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/^### (.+)$/gm, '<strong>$1</strong>')
+    .replace(/^## (.+)$/gm, '<strong>$1</strong>')
+    .replace(/^# (.+)$/gm, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
 function addMsg(role, text) {
   const msgs = document.getElementById('chatMsgs');
   const div = document.createElement('div');
   div.className = `msg ${role}`;
+  const rendered = role === 'ai' ? renderMarkdown(text) : text.replace(/\n/g, '<br>');
   div.innerHTML = `
     <div class="msg-avatar">${role === 'ai' ? '🤖' : '👤'}</div>
-    <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+    <div class="msg-bubble">${rendered}</div>
   `;
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
